@@ -10,7 +10,6 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>effective-java</module>
-        <module>design-mode</module>
         <module>design-mode-java</module>
     </modules>
 
