@@ -1,7 +1,6 @@
 package com.markus.designpattern.abstractfactory.factory;
 
 import com.markus.designpattern.abstractfactory.product.Human;
-import com.markus.designpattern.abstractfactory.product.YellowHuman;
 
 /**
  * @author: markus
