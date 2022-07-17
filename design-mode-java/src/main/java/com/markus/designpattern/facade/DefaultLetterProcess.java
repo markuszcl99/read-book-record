@@ -19,7 +19,7 @@ public class DefaultLetterProcess implements LetterProcess {
     }
 
     @Override
-    public void letterInotoEnvelope() {
+    public void letterIntoEnvelope() {
         System.out.println("将信纸放进信封中");
     }
 

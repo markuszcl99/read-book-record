@@ -21,7 +21,7 @@ public class PostOffice {
     public void sendLetter(String context, String address) {
         letterProcess.writeContext(context);
         letterProcess.fillEnvelop(address);
-        letterProcess.letterInotoEnvelope();
+        letterProcess.letterIntoEnvelope();
         letterProcess.sendLetter();
     }
 }
