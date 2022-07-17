@@ -25,7 +25,7 @@ public interface LetterProcess {
     /**
      * 将信放在信封里
      */
-    void letterInotoEnvelope();
+    void letterIntoEnvelope();
 
     /**
      * 将信邮递
