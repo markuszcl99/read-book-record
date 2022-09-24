@@ -1,6 +1,6 @@
 package com.markus.java.jvm.bytecode;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 /**
  * @author: markus
@@ -45,6 +45,7 @@ public class ByteCodeInterview {
     @Test
     public void test5(){
 
+        // 包装类对象的缓存问题
         Integer i1 = 10;
         Integer i2 = 10;
         System.out.println(i1 == i2);//true
@@ -64,7 +65,7 @@ public class ByteCodeInterview {
     @Test
     public void test6(){
         String str = new String("hello") + new String("world");
-        String str1 = "helloworld";
+        String str1 = "helloworld";// 主要看字符串常量池中是否已经创建过该字符串
         str.intern();
         System.out.println(str == str1);//false --> true (加上intern() 在str声明之前)
 
