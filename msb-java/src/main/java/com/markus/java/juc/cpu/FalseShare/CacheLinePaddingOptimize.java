@@ -1,4 +1,4 @@
-package com.markus.java.juc.FalseShare;
+package com.markus.java.juc.cpu.FalseShare;
 
 /**
  * @author: markus
