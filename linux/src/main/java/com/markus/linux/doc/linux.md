@@ -79,6 +79,9 @@ manpages-zh-1.5.1.tar.gz
 总用量 1924
 drwxrwxrwx 5 lighthouse lighthouse    4096 1月  30 22:17 manpages-zh-1.5.1
 -rw-r--r-- 1 root       root       1965336 12月 17 2010 manpages-zh-1.5.1.tar.gz
+# ls -lh 展示文件大小时，以M为单位展示
+[root@VM-24-10-centos ~]# ls -lh /tmp/etc-backup.tar*
+-rw-r--r-- 1 root root 11M 1月  31 22:15 /tmp/etc-backup.tar.gz
 ```
 
 - ls -a
@@ -199,6 +202,82 @@ self_update.sh  tat_agent_service  tat_agent_service.conf
 - [xyz] 匹配xyz任意一个字符
 - [a-z] 匹配一个范围
 - [!xyz] 或者 [\^xyz] 不匹配xyz任何一个字符
+
+### 7、文本查看命令
+
+- cat
+    - 文本内容显示到终端
+- head
+    - 查看文件开头
+- tail
+    - 查看文件结尾
+    - -f 常用参数，文件内容更新后，显示信息同步更新
+- wc
+    - 统计文件内容信息
+- more
+- less
+
+### 7、打包与压缩命令
+
+- tar 打包命令
+    - c 执行打包，建立新的存档
+    - f 打包为文件
+    - z 结合gzip压缩指令 将指定文件(linux一切接文件)打包压缩为.tar.gz双拓展文件
+    - j 结合bzip2压缩指令 将指定文件打包压缩为.tar.bz2双拓展文件
+    - x 结合gizp或者bzip2解压缩指令，将压缩文件解压
+    - -C 指定路径解压
+- gzip bzip2 压缩与解压缩命令
+
+```bash
+# 
+[root@VM-24-10-centos ~]# tar czf /tmp/etc-backup.tar.gz /etc
+tar: 从成员名中删除开头的“/”
+[root@VM-24-10-centos ~]# tar cjf /tmp/etc-backup.tar.bz2 /etc
+tar: 从成员名中删除开头的“/”
+[root@VM-24-10-centos ~]# tar cf /tmp/etc-backup.tar /etc
+tar: 从成员名中删除开头的“/”
+[root@VM-24-10-centos ~]# ls -lh /tmp/etc-backup.tar*
+-rw-r--r-- 1 root root  30M 1月  31 22:23 /tmp/etc-backup.tar
+-rw-r--r-- 1 root root 9.1M 1月  31 22:23 /tmp/etc-backup.tar.bz2
+-rw-r--r-- 1 root root  11M 1月  31 22:15 /tmp/etc-backup.tar.gz
+[root@VM-24-10-centos ~]# tar xf /tmp/etc-backup.tar.bz2 -C /root
+[root@VM-24-10-centos ~]# ls
+a  b  c  etc  manpages-zh-1.5.1  manpages-zh-1.5.1.tar.gz  markus
+```
+
+### 8、文本编辑器vi
+
+vim的模式
+
+- 正常模式
+    - h 光标向左移动
+    - j 光标向下移动
+    - k 光标向上移动
+    - l 光标向右移动
+    - yy 复制当前行的数据
+    - y$ 复制当前光标到行尾的数据
+    - dd 剪切当前行的数据
+    - d$ 剪切当前光标到行尾的数据
+    - u 撤销（可多次执行）
+    - ctrl+r 重做（可多次执行）
+    - x 删除光标所在的元素
+    - r 替换光标所在的元素
+    - g 光标移至第一行开头位置
+    - G 光标移至最后一行开头位置
+    - num+G 光标移至指定行数的开头位置
+    - ^ 行的开头
+    - $ 行的结尾
+- 插入模式
+    - i 进入插入模式，光标在当前位置
+    - I 进入插入模式，光标在当前行的开头位置
+    - a 进入插入模式，光标在当前位置的下一位
+    - A 进入插入模式，光标在当前行的结尾位置
+    - o 进入插入模式，在当前光标上面插入一行
+    - O 进入插入模式，在当前光标下面插入一行
+- 命令模式
+    - : 进入命令行模式
+    - :set nu 显示文本行数
+- 可视模式
 
 ## 三、系统管理篇
 
