@@ -277,7 +277,82 @@ vim的模式
 - 命令模式
     - : 进入命令行模式
     - :set nu 显示文本行数
+        - vim /etc/vimrc 设置指令 set nu 全局展示文件的行号
+    - :set nonu 取消显示文本行数
+    - :set nohlsearch 取消文本高亮
+    - : w fileName 保存到指定路径下的文件（还可以通过vim file 后续编辑文件后进行 : w即可）
+    - : q 退出
+    - :!command 在文本编辑器中执行其他指令
+    - /x 搜索文本当中的x文本
+    - :s/old/new 替换光标所在行的第一个old文本到new文本
+    - :%s/old/new 替换光标所在行的old文本到new文本
+    - :%s/old/new/g 全局替换文本
+    - :3,5s/old/new 文本3-5行替换文本old到new
 - 可视模式
+    - v 字符可视模式
+    - V 行可视模式
+    - ctrl+v 块可视模式
+        - 配合d和I(大写i)命令可以进行块的便利操作
+
+### 9、用户与权限管理
+
+#### 用户管理常用命令
+
+- useradd 新建用户(root用户才有权限)
+    - cat /etc/password
+    - tail -10 /etc/shadow
+    - id user
+    - useradd -g gourp user
+- userdel 删除用户
+    - userdel user 删除指定用户
+    - userdel -r user 删除指定用户及其用户目录
+- passwd 修改用户密码
+    - passwd user设置密码
+    - passwd 更改当前用户的密码
+- usermod 修改用户属性
+    - usermod -d path w
+    - usermod -g group user
+- chage 修改用户属性
+
+#### 组管理命令
+
+- groupadd 新建用户组
+- groupdel 删除用户组
+
+#### 用户切换命令
+
+- su 切换用户
+    - su - user 表示切换到user用户下，- 起到的作用是切换过程中将环境一并切换
+    - su user 不完全切换
+- sudo 以其他用户身份执行命令
+    - visudo 设置需要使用sudo的用户(组)
+
+#### 用户配置文件
+
+> vim /etc/passwd 用户配置文件
+
+```bash
+ntp:x:38:38::/etc/ntp:/sbin/nologin
+# /sbin/nologin 不允许当前用户登录终端
+lighthouse:x:1000:1000::/home/lighthouse:/bin/bash
+用户名:登录是否需要密码:uid:gid:用户日志:家目录:用户的命令解释器
+```
+
+
+
+> vim /etc/shadow 用户密码相关配置文件
+
+
+
+> vim /etc/group 用户组配置文件
+
+```bash
+# 用户组:是否需要密码登录:gid:其他组设置
+lighthouse:x:1000:lighthouse
+mail:x:12:postfix
+```
+
+
 
 ## 三、系统管理篇
 
