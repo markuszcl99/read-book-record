@@ -20,6 +20,6 @@ public class LoginUtils {
     public static boolean hasLogin(Channel channel) {
         Attribute<Boolean> login = channel.attr(Attributes.LOGIN);
         // login 有值即表示登录成功
-        return login != null;
+        return login.get() != null;
     }
 }

@@ -4,6 +4,7 @@ import com.markus.netty.wechat.protocol.Packet;
 import com.markus.netty.wechat.protocol.PacketCodeC;
 import com.markus.netty.wechat.protocol.command.LoginRequestCommand;
 import com.markus.netty.wechat.protocol.command.LoginResponseCommand;
+import com.markus.netty.wechat.protocol.command.MessageResponseCommand;
 import com.markus.netty.wechat.utils.LoginUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -36,12 +37,18 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf byteBuf = (ByteBuf) msg;
-        LoginResponseCommand response = (LoginResponseCommand) PacketCodeC.INSTANCE.decode(byteBuf);
-        if (response.isSuccess()) {
-            System.out.println("客户端收到登录响应: 登录成功！");
-            LoginUtils.markAsLogin(ctx.channel());
-        } else {
-            System.out.println("客户端收到登录响应: 登录失败！错误信息为: " + response.getMsg());
+        Packet response = PacketCodeC.INSTANCE.decode(byteBuf);
+        if (response instanceof LoginResponseCommand) {
+            LoginResponseCommand res = (LoginResponseCommand) response;
+            if (res.isSuccess()) {
+                System.out.println("客户端收到登录响应: 登录成功！");
+                LoginUtils.markAsLogin(ctx.channel());
+            } else {
+                System.out.println("客户端收到登录响应: 登录失败！错误信息为: " + res.getMsg());
+            }
+        } else if (response instanceof MessageResponseCommand) {
+            MessageResponseCommand res = (MessageResponseCommand) response;
+            System.out.println(res.getResponse());
         }
     }
 }
