@@ -28,7 +28,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         login.setUsername("markuszhang");
         login.setPassword("123456");
 
-        ByteBuf byteBuf = PacketCodeC.encode(login);
+        ByteBuf byteBuf = PacketCodeC.INSTANCE.encode(login, ctx.alloc());
         // 向服务端写入
         ctx.writeAndFlush(byteBuf);
     }
@@ -36,7 +36,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf byteBuf = (ByteBuf) msg;
-        LoginResponseCommand response = PacketCodeC.decode(byteBuf, LoginResponseCommand.class);
+        LoginResponseCommand response = (LoginResponseCommand) PacketCodeC.INSTANCE.decode(byteBuf);
         if (response.isSuccess()) {
             System.out.println("客户端收到登录响应: 登录成功！");
             LoginUtils.markAsLogin(ctx.channel());

@@ -17,4 +17,14 @@ public interface Command {
      * 登录响应 指令
      */
     Byte LOGIN_RESPONSE = 2;
+
+    /**
+     * 消息发送 指令
+     */
+    Byte MESSAGE_REQUEST = 3;
+
+    /**
+     * 消息响应 指令
+     */
+    Byte MESSAGE_RESPONSE = 4;
 }

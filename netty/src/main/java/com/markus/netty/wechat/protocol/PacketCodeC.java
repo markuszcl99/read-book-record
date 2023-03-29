@@ -1,7 +1,17 @@
 package com.markus.netty.wechat.protocol;
 
+import com.markus.netty.wechat.protocol.command.LoginRequestCommand;
+import com.markus.netty.wechat.protocol.command.LoginResponseCommand;
+import com.markus.netty.wechat.protocol.command.MessageRequestCommand;
+import com.markus.netty.wechat.protocol.command.MessageResponseCommand;
+import com.markus.netty.wechat.protocol.serializer.JsonSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.markus.netty.wechat.protocol.Command.*;
 
 /**
  * @author: markus
@@ -11,11 +21,26 @@ import io.netty.buffer.ByteBufAllocator;
  * It's my honor to share what I've learned with you!
  */
 public class PacketCodeC {
-    private static int MAGIC_NUM = 0X12345678;
 
-    public static ByteBuf encode(Packet packet) {
-        // 申请一个ByteBuf
-        ByteBuf byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
+    private static int MAGIC_NUM = 0X12345678;
+    public static PacketCodeC INSTANCE = new PacketCodeC();
+
+    private Map<Byte, Class<? extends Packet>> packetMap;
+    private Map<Byte, Serializer> serializerMap;
+
+    private PacketCodeC() {
+        packetMap = new HashMap<>();
+        packetMap.put(LOGIN_REQUEST, LoginRequestCommand.class);
+        packetMap.put(LOGIN_RESPONSE, LoginResponseCommand.class);
+        packetMap.put(MESSAGE_REQUEST, MessageRequestCommand.class);
+        packetMap.put(MESSAGE_RESPONSE, MessageResponseCommand.class);
+
+        serializerMap = new HashMap<>();
+        serializerMap.put(SerializerAlgorithm.JSON, new JsonSerializer());
+    }
+
+    public ByteBuf encode(Packet packet, ByteBufAllocator allocator) {
+        ByteBuf byteBuf = allocator.ioBuffer();
         byte[] data = Serializer.DEFAULT.serialize(packet);
         // 1. 魔数
         byteBuf.writeInt(MAGIC_NUM);
@@ -23,20 +48,35 @@ public class PacketCodeC {
         byteBuf.writeByte(packet.getVersion());
         // 3. 序列化算法
         byteBuf.writeByte(SerializerAlgorithm.JSON);
-        // 4. 数据长度
+        // 4. 指令类型
+        byteBuf.writeByte(packet.getCommand());
+        // 5. 数据长度
         byteBuf.writeInt(data.length);
-        // 5. 数据
+        // 6. 数据
         byteBuf.writeBytes(data);
         return byteBuf;
     }
 
-    public static <T> T decode(ByteBuf byteBuf, Class<T> clazz) {
+    public Packet decode(ByteBuf byteBuf) {
         int magicNum = byteBuf.readInt();
         byte dataVersion = byteBuf.readByte();
+
         byte serializeAlgorithm = byteBuf.readByte();
+        Serializer serializer = getSerializer(serializeAlgorithm);
+        byte command = byteBuf.readByte();
+        Class<? extends Packet> requestType = getRequestType(command);
+
         int len = byteBuf.readInt();
         byte[] data = new byte[len];
         byteBuf.readBytes(data);
-        return Serializer.DEFAULT.deserialize(data, clazz);
+        return serializer.deserialize(data, requestType);
+    }
+
+    private Class<? extends Packet> getRequestType(Byte command) {
+        return packetMap.get(command);
+    }
+
+    private Serializer getSerializer(Byte serializeAlgorithm) {
+        return serializerMap.get(serializeAlgorithm);
     }
 }
