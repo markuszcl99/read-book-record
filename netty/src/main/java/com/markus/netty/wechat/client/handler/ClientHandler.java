@@ -4,6 +4,7 @@ import com.markus.netty.wechat.protocol.Packet;
 import com.markus.netty.wechat.protocol.PacketCodeC;
 import com.markus.netty.wechat.protocol.command.LoginRequestCommand;
 import com.markus.netty.wechat.protocol.command.LoginResponseCommand;
+import com.markus.netty.wechat.utils.LoginUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -38,6 +39,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         LoginResponseCommand response = PacketCodeC.decode(byteBuf, LoginResponseCommand.class);
         if (response.isSuccess()) {
             System.out.println("客户端收到登录响应: 登录成功！");
+            LoginUtils.markAsLogin(ctx.channel());
         } else {
             System.out.println("客户端收到登录响应: 登录失败！错误信息为: " + response.getMsg());
         }
